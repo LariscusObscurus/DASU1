@@ -16,11 +16,30 @@ namespace Client
 	{
 		public Client() 
 		{
-			mClient = new TcpClient(mHostname, mPort);
-			mStream = mClient.GetStream();
-			mSsl = new SslStream(mStream, true, new RemoteCertificateValidationCallback(ValidateCertificate));
-			mReader = new BinaryReader(mSsl, Encoding.UTF8);
-			mWriter = new BinaryWriter(mSsl, Encoding.UTF8);
+			try {
+				mClient = new TcpClient(mHostname, mPort);
+				mStream = mClient.GetStream();
+				mSsl = new SslStream(mStream, true, new RemoteCertificateValidationCallback(ValidateCertificate));
+				mSsl.AuthenticateAsClient("InstantMessengerServer");
+				mReader = new BinaryReader(mSsl, Encoding.UTF8);
+				mWriter = new BinaryWriter(mSsl, Encoding.UTF8);
+			} catch (AuthenticationException e) {
+				Console.WriteLine(String.Format("{0}: {1}", e.ToString(), e.Message));
+			} catch (ArgumentNullException e) {
+				Console.WriteLine(String.Format("{0}: {1}", e.ToString(), e.Message));
+			} catch (ArgumentOutOfRangeException e) {
+				Console.WriteLine(String.Format("{0}: {1}", e.ToString(), e.Message));
+			} catch (SocketException e) {
+				Console.WriteLine(String.Format("{0}: {1}", e.ToString(), e.Message));
+			} catch (ObjectDisposedException e) {
+				Console.WriteLine(String.Format("{0}: {1}", e.ToString(), e.Message));
+			} catch (InvalidOperationException e) {
+				Console.WriteLine(String.Format("{0}: {1}", e.ToString(), e.Message));
+			} catch (ArgumentException e) {
+				Console.WriteLine(String.Format("{0}: {1}", e.ToString(), e.Message));
+			} finally {
+				Dispose();
+			}
 		}
 
 		public void Dispose()
