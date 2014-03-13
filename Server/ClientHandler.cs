@@ -38,17 +38,24 @@ namespace Server
 			Console.WriteLine("New connection.");
 			_netStream = _client.GetStream();
 			_sslStream = new SslStream(_netStream, false);
-			_binaryReader = new BinaryReader(_sslStream, Encoding.UTF8);
-			_binaryWriter = new BinaryWriter(_sslStream, Encoding.UTF8);
 
 			try {
 				_sslStream.AuthenticateAsServer(_cert, false, SslProtocols.Tls, true); //kein client zertifikat, tls, ablaufdatum aber überprüfen 
+				_binaryReader = new BinaryReader(_sslStream, Encoding.UTF8);
+				_binaryWriter = new BinaryWriter(_sslStream, Encoding.UTF8);
 			} 
 			catch(AuthenticationException ex)
 			{
 				Console.WriteLine(ex.Message);
 				CloseConnection();
 			}
+			catch(ArgumentException ex)
+			{
+				Console.WriteLine(ex.Message);
+				CloseConnection();
+			}
+
+
 			Console.WriteLine("Connection authenticated.");
 
 			_server.ClientList.Add(this);
@@ -80,6 +87,7 @@ namespace Server
 			if(_client.Connected)
 			{
 				_binaryWriter.Write(msg);
+				_binaryWriter.Flush();
 			}
 		}
 	}
