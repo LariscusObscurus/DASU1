@@ -1,0 +1,6 @@
+C:\Users\Leonhardt\documents\visual studio 2013\Projects\DASU1\Server\bin\Debug\Server.exe.config
+C:\Users\Leonhardt\documents\visual studio 2013\Projects\DASU1\Server\bin\Debug\Server.exe
+C:\Users\Leonhardt\documents\visual studio 2013\Projects\DASU1\Server\bin\Debug\Server.pdb
+C:\Users\Leonhardt\documents\visual studio 2013\Projects\DASU1\Server\obj\Debug\Server.exe
+C:\Users\Leonhardt\documents\visual studio 2013\Projects\DASU1\Server\obj\Debug\Server.pdb
+C:\Users\Leonhardt\Documents\Visual Studio 2013\Projects\DASU1\Server\bin\Debug\Cert\selfSigned.pfx

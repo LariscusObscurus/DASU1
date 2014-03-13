@@ -1,0 +1,6 @@
+C:\Users\Leonhardt\documents\visual studio 2013\Projects\DASU1\Client\bin\Debug\Client.exe.config
+C:\Users\Leonhardt\documents\visual studio 2013\Projects\DASU1\Client\bin\Debug\Client.exe
+C:\Users\Leonhardt\documents\visual studio 2013\Projects\DASU1\Client\bin\Debug\Client.pdb
+C:\Users\Leonhardt\documents\visual studio 2013\Projects\DASU1\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Users\Leonhardt\documents\visual studio 2013\Projects\DASU1\Client\obj\Debug\Client.exe
+C:\Users\Leonhardt\documents\visual studio 2013\Projects\DASU1\Client\obj\Debug\Client.pdb
