@@ -9,12 +9,13 @@ using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Client
 {
 	class Client : IDisposable
 	{
-		public Client() 
+		private Client() 
 		{
 			try {
 				mClient = new TcpClient(mHostname, mPort);
@@ -24,21 +25,35 @@ namespace Client
 				mReader = new BinaryReader(mSsl, Encoding.UTF8);
 				mWriter = new BinaryWriter(mSsl, Encoding.UTF8);
 			} catch (AuthenticationException e) {
-				Console.WriteLine(String.Format("{0}: {1}", e.ToString(), e.Message));
+				throw new Exception(e.Message, e);
 			} catch (ArgumentNullException e) {
-				Console.WriteLine(String.Format("{0}: {1}", e.ToString(), e.Message));
+				throw new Exception(e.Message, e);
 			} catch (ArgumentOutOfRangeException e) {
-				Console.WriteLine(String.Format("{0}: {1}", e.ToString(), e.Message));
+				throw new Exception(e.Message, e);
 			} catch (SocketException e) {
-				Console.WriteLine(String.Format("{0}: {1}", e.ToString(), e.Message));
+				throw new Exception(e.Message, e);
 			} catch (ObjectDisposedException e) {
-				Console.WriteLine(String.Format("{0}: {1}", e.ToString(), e.Message));
+				throw new Exception(e.Message, e);
 			} catch (InvalidOperationException e) {
-				Console.WriteLine(String.Format("{0}: {1}", e.ToString(), e.Message));
+				throw new Exception(e.Message, e);
 			} catch (ArgumentException e) {
-				Console.WriteLine(String.Format("{0}: {1}", e.ToString(), e.Message));
-			} finally {
-				Dispose();
+				throw new Exception(e.Message, e);
+			}
+		}
+
+		public static Client Instance
+		{
+			get
+			{
+				if (sClient == null) {
+					lock (mLock) {
+						if (sClient == null) {
+							sClient = new Client();
+						}
+					}
+				}
+
+				return sClient;
 			}
 		}
 
@@ -73,5 +88,7 @@ namespace Client
 		private SslStream mSsl = null;
 		private BinaryReader mReader = null;
 		private BinaryWriter mWriter = null;
+		private static volatile Client sClient = null;
+		private static object mLock = new Object();
 	}
 }

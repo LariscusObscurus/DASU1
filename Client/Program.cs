@@ -3,21 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Client
 {
 	class Program
 	{
+		[MTAThread]
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Instant Messenger Client");
-			Console.WriteLine("Enter . or press ^C to quit client");
-
-			using (Client client = new Client()) {
-				while (true) {
-					client.Read();
-				}
-			}
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
+			Application.Run(new Form1());
 		}
 	}
 }
