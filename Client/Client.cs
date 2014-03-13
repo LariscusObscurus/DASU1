@@ -46,7 +46,7 @@ namespace Client
 			get
 			{
 				if (sClient == null) {
-					lock (mLock) {
+					lock (sLock) {
 						if (sClient == null) {
 							sClient = new Client();
 						}
@@ -89,6 +89,6 @@ namespace Client
 		private BinaryReader mReader = null;
 		private BinaryWriter mWriter = null;
 		private static volatile Client sClient = null;
-		private static object mLock = new Object();
+		private static object sLock = new Object();
 	}
 }
