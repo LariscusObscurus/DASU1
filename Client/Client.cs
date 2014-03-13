@@ -5,40 +5,54 @@ using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
+using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Client
 {
-	class Client
+	class Client : IDisposable
 	{
-		private Client() 
+		public Client() 
 		{
 			mClient = new TcpClient(mHostname, mPort);
 			mStream = mClient.GetStream();
-			mSsl = new SslStream(mStream);
+			mSsl = new SslStream(mStream, true, new RemoteCertificateValidationCallback(ValidateCertificate));
+			mReader = new BinaryReader(mSsl, Encoding.UTF8);
+			mWriter = new BinaryWriter(mSsl, Encoding.UTF8);
 		}
 
-		public static Client Instance
+		public void Dispose()
 		{
-			get 
-			{
-				return sClient;
-			}
+			mWriter.Close();
+			mReader.Close();
+			mSsl.Close();
+			mStream.Close();
+			mClient.Close();
 		}
 
-		public Stream GetStream() 
+		public void Write(string message)
 		{
-			return mStream;
+			mWriter.Write(message);
 		}
 
+		public string Read()
+		{
+			return mReader.ReadString();
+		}
+
+		private bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+		{
+			return true;
+		}
+
+		private readonly string mHostname = "127.0.0.1";
+		private readonly int mPort = 12345;
 		private TcpClient mClient = null;
-		private string mHostname = "";
-		private int mPort = 12345;
 		private NetworkStream mStream = null;
 		private SslStream mSsl = null;
-		private X509Certificate2 _cert = new X509Certificate2("Cert/selfSigned.pfx", "password");
-		private static readonly Client sClient = new Client();
+		private BinaryReader mReader = null;
+		private BinaryWriter mWriter = null;
 	}
 }
