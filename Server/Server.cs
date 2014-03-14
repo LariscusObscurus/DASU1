@@ -54,7 +54,7 @@ namespace Server
 		{
 			foreach(ClientHandler it in _clientList)
 			{
-				it.CloseConnection();
+				it.Dispose();
 			}
 		}
 

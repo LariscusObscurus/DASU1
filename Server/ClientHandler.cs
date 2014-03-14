@@ -13,7 +13,7 @@ using System.IO;
 
 namespace Server
 {
-	class ClientHandler
+	class ClientHandler : IDisposable
 	{
 		Server _server;
 		TcpClient _client;
@@ -47,12 +47,12 @@ namespace Server
 			catch(AuthenticationException ex)
 			{
 				Console.WriteLine(ex.Message);
-				CloseConnection();
+				Dispose();
 			}
 			catch(ArgumentException ex)
 			{
 				Console.WriteLine(ex.Message);
-				CloseConnection();
+				Dispose();
 			}
 
 
@@ -63,7 +63,7 @@ namespace Server
 
 		}
 
-		public void CloseConnection()
+		public void Dispose()
 		{
 			_binaryWriter.Close();
 			_binaryReader.Close();
@@ -75,10 +75,18 @@ namespace Server
 
 		void Receive()
 		{
-			while (_client.Connected)
+			try
 			{
-				string msg = _binaryReader.ReadString();
-				_server.BroadcastMessage(this, msg);
+				while (_client.Connected)
+				{
+					string msg = _binaryReader.ReadString();
+					_server.BroadcastMessage(this, msg);
+				}
+
+			} 
+			catch(EndOfStreamException)
+			{
+				Dispose();
 			}
 		}
 
