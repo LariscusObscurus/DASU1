@@ -73,7 +73,11 @@ namespace Client
 
 		public string Read()
 		{
-			return mReader.ReadString();
+			try {
+				return mReader.ReadString();
+			} catch {
+				return "";
+			}
 		}
 
 		private bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
