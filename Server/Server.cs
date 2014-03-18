@@ -11,17 +11,21 @@ using System.Collections;
 
 namespace Server
 {
+	/// <summary>
+	/// Server-Klasse
+	/// </summary>
 	class Server
 	{
 		TcpListener _server;
 		IPAddress _ip = IPAddress.Parse("127.0.0.1");
 		int _port = 12345;
-		//
-		//
 		X509Certificate2 _cert;
 		List<ClientHandler> _clientList = new List<ClientHandler>();
 		bool _running = true;
 
+		/// <summary>
+		/// Server wird erstellt und führt den main-loop aus.
+		/// </summary>
 		public Server()
 		{
 			try
@@ -40,6 +44,9 @@ namespace Server
 			Listen();
 		}
 
+		/// <summary>
+		/// Akzeptiert neue Clients
+		/// </summary>
 		void Listen()
 		{
 			Console.WriteLine("Listening.");
@@ -50,6 +57,9 @@ namespace Server
 			}
 		}
 
+		/// <summary>
+		/// Schließt alle Client Verbindungen
+		/// </summary>
 		public void Close()
 		{
 			foreach(ClientHandler it in _clientList)
@@ -58,6 +68,11 @@ namespace Server
 			}
 		}
 
+		/// <summary>
+		/// Sendet eingekommene Nachricht an alle anderen Clients
+		/// </summary>
+		/// <param name="sender">Der sendende Client</param>
+		/// <param name="msg">Die zu erhaltene Nachricht</param>
 		public void BroadcastMessage(ClientHandler sender, string msg)
 		{
 			foreach(ClientHandler it in _clientList) 
@@ -69,6 +84,9 @@ namespace Server
 			}
 		}
 
+		/// <summary>
+		/// Alle verbundene Clients.
+		/// </summary>
 		public List<ClientHandler> ClientList
 		{
 			get { return _clientList; }

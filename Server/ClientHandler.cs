@@ -13,6 +13,9 @@ using System.IO;
 
 namespace Server
 {
+	/// <summary>
+	/// Kümmert sich um eingehende Clients
+	/// </summary>
 	class ClientHandler : IDisposable
 	{
 		Server _server;
@@ -23,6 +26,12 @@ namespace Server
 		BinaryReader _binaryReader;
 		BinaryWriter _binaryWriter;
 
+		/// <summary>
+		/// Initialisiert den ClientHandler
+		/// </summary>
+		/// <param name="server">Server der den Handler ausführt</param>
+		/// <param name="client">TcpClient der für die Datenübertragung zuständig ist</param>
+		/// <param name="cert">Zertifikat für die Validierung</param>
 		public ClientHandler(Server server, TcpClient client, X509Certificate2 cert)
 		{
 			_client = client;
@@ -33,6 +42,9 @@ namespace Server
 			t.Start();
 		}
 
+		/// <summary>
+		/// Verbindet den Server mit dem Client
+		/// </summary>
 		void SetupConnection()
 		{
 			Console.WriteLine("New connection.");
@@ -63,6 +75,9 @@ namespace Server
 
 		}
 
+		/// <summary>
+		/// Schließt die Verbindung zum Client
+		/// </summary>
 		public void Dispose()
 		{
 			_binaryWriter.Close();
@@ -73,6 +88,9 @@ namespace Server
 			Console.WriteLine("Connection closed.");
 		}
 
+		/// <summary>
+		/// Ließt Daten vom Client
+		/// </summary>
 		void Receive()
 		{
 			try
@@ -90,6 +108,10 @@ namespace Server
 			}
 		}
 
+		/// <summary>
+		/// Sendet daten zum Client
+		/// </summary>
+		/// <param name="msg"></param>
 		public void Send(string msg)
 		{
 			if(_client.Connected)

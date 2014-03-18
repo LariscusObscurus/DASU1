@@ -13,8 +13,14 @@ using System.Windows.Forms;
 
 namespace Client
 {
+	/// <summary>
+	/// Simple Client-Klasse für das Chatprogramm
+	/// </summary>
 	class Client : IDisposable
 	{
+		/// <summary>
+		/// Verbindet den Client mit dem Server
+		/// </summary>
 		private Client() 
 		{
 			try {
@@ -41,6 +47,9 @@ namespace Client
 			}
 		}
 
+		/// <summary>
+		/// Liest Client Singleton
+		/// </summary>
 		public static Client Instance
 		{
 			get
@@ -57,6 +66,9 @@ namespace Client
 			}
 		}
 
+		/// <summary>
+		/// Schließt die Verbindung
+		/// </summary>
 		public void Dispose()
 		{
 			mWriter.Close();
@@ -66,20 +78,36 @@ namespace Client
 			mClient.Close();
 		}
 
+		/// <summary>
+		/// Sendet einen String zu dem Server
+		/// </summary>
+		/// <param name="message">Der zu versendende String</param>
 		public void Write(string message)
 		{
-			mWriter.Write(message);
+			lock (mStream) {
+				mWriter.Write(message);
+			}
 		}
 
 		public string Read()
 		{
 			try {
-				return mReader.ReadString();
+				lock (mStream) {
+					return mReader.ReadString();
+				}
 			} catch {
 				return "";
 			}
 		}
 
+		/// <summary>
+		/// Gibt immer TRUE zurück
+		/// </summary>
+		/// <param name="sender">Nope</param>
+		/// <param name="certificate">Nope</param>
+		/// <param name="chain">Nope</param>
+		/// <param name="sslPolicyErrors">Nope</param>
+		/// <returns></returns>
 		private bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
 		{
 			return true;
